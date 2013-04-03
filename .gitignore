@@ -10,6 +10,7 @@
 *.ncb
 *.sdf
 .hg
+*.rej
 
 # /api/libsphinxclient/
 /api/libsphinxclient/*.ncb
