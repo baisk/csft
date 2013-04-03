@@ -18,6 +18,7 @@
 #include "sphinxint.h"
 #include <time.h>
 
+#include "py_layer.h"
 
 #define CONF_CHECK(_hash,_key,_msg,_add) \
 	if (!( _hash.Exists ( _key ) )) \
@@ -198,6 +199,20 @@ int main ( int argc, char ** argv )
 	CSphConfigParser cp;
 	CSphConfig & hConf = cp.m_tConf;
 	sphLoadConfig ( sOptConfig, false, cp );
+
+ 	/////////////////////
+	// init python layer
+	////////////////////
+	if ( hConf("python") && hConf["python"]("python") )
+	{
+		CSphConfigSection & hPython = hConf["python"]["python"];
+#if USE_PYTHON
+		if(!cftInitialize(hPython)) 
+			sphDie ( "Python layer's initiation failed.");
+#else
+		sphDie ( "Python layer defined, but search does Not supports python. used --enbale-python to recompile.");
+#endif
+	}	
 
 	/////////////////////
 	// search each index
@@ -483,6 +498,11 @@ int main ( int argc, char ** argv )
 	}
 
 	sphShutdownWordforms ();
+
+#if USE_PYTHON
+	cftShutdown(); //clean up 
+#endif
+
 }
 
 //

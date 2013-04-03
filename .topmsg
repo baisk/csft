@@ -1,7 +1,7 @@
 From: baisk <buaagaowei@gmail.com>
-Subject: [PATCH] t/cs_fix
+Subject: [PATCH] t/cs_pysource
 
 <patch description>
-fix some bug in sphinx
+use python source in coreseek
 
 Signed-off-by: baisk <buaagaowei@gmail.com>
