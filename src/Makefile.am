@@ -3,8 +3,12 @@ SRC_SPHINX = sphinx.cpp sphinxexcerpt.cpp sphinxquery.cpp \
 	sphinxutils.cpp sphinxstd.cpp sphinxsort.cpp sphinxexpr.cpp sphinxfilter.cpp \
 	sphinxsearch.cpp sphinxrt.cpp sphinxjson.cpp sphinxudf.c sphinxaot.cpp
 
+if USE_MMSEG
+SRC_MMSEG = tokenizer_zhcn.cpp
+endif
+
 noinst_LIBRARIES = libsphinx.a
-libsphinx_a_SOURCES = $(SRC_SPHINX)
+libsphinx_a_SOURCES = $(SRC_SPHINX) $(SRC_MMSEG)
 
 bin_PROGRAMS = indexer searchd search spelldump indextool wordbreaker
 noinst_PROGRAMS = tests
@@ -31,5 +35,5 @@ LIBRE2_INC =
 endif
 
 AM_CPPFLAGS = $(LIBRE2_INC) -DSYSCONFDIR="\"$(sysconfdir)\"" -DDATADIR="\"$(localstatedir)/data\""
-COMMON_LIBS = libsphinx.a $(LIBSTEMMER_LIBS) $(MYSQL_LIBS) $(PGSQL_LIBS) $(LIBRE2_LIBS)
+COMMON_LIBS = libsphinx.a $(LIBSTEMMER_LIBS) $(MYSQL_LIBS) $(PGSQL_LIBS) $(LIBRE2_LIBS) $(MMSEG_LIBS)
 LDADD = $(COMMON_LIBS)

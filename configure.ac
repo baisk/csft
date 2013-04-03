@@ -342,6 +342,25 @@ else
 fi
 AM_CONDITIONAL(USE_PGSQL, test x$ac_cv_use_pgsql != xno -o x$ac_cv_use_satic_pgsql != xno )
 
+
+dnl ---
+# check if we should complie with libmmseg (a mmseg Chinese Segmenter) support
+AC_ARG_WITH([mmseg],
+            AC_HELP_STRING([--with-mmseg], [compile with libmmseg, a mmseg Chinese Segmenter support (default is enabled)]),
+            [ac_cv_use_mmseg=$withval], [ac_cv_use_mmseg=yes]
+)
+AC_MSG_CHECKING([whether to compile with libmmseg support])
+if test x$ac_cv_use_mmseg != xno; then
+       AC_MSG_RESULT([yes])
+    AC_CHECK_MMSEG([$ac_cv_use_mmseg])
+    AC_DEFINE(USE_MMSEG,1,[Define to 1 if you want to compile with libmmseg support])
+    AC_SUBST([MMSEG_LIBS])
+    AC_SUBST([MMSEG_CFLAGS])
+else
+       AC_MSG_RESULT([no])
+fi
+AM_CONDITIONAL(USE_MMSEG, test x$ac_cv_use_mmseg != xno)
+
 # add macports include directory
 if (echo $MYSQL_LIBS | grep -q -- -L/opt/local/lib); then
    MYSQL_CFLAGS="$MYSQL_CFLAGS -I/opt/local/include"
@@ -351,6 +370,11 @@ fi
 MYSQL_CFLAGS=`echo $MYSQL_CFLAGS | sed -e 's/-O[[0123sz]]//g'`
 
 dnl ---
+
+# we can now set preprocessor flags for both C and C++ compilers
+CPPFLAGS="$CPPFLAGS $MYSQL_CFLAGS $PGSQL_CFLAGS $MMSEG_CFLAGS"
+dnl ---
+
 
 AC_MSG_CHECKING([whether to use 64-bit document/word IDs])
 sph_enable_id64=no

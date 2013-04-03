@@ -1,7 +1,7 @@
 From: baisk <buaagaowei@gmail.com>
-Subject: [PATCH] t/cs_fix
+Subject: [PATCH] t/cs_mmseg
 
 <patch description>
-fix some bug in sphinx
+mmseg to token chinese
 
 Signed-off-by: baisk <buaagaowei@gmail.com>
