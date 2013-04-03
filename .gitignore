@@ -6,10 +6,10 @@
 /sphinx.conf.dist
 /bin
 /junk
-/*.suo
-/*.ncb
-/*.sdf
-/.hg
+*.suo
+*.ncb
+*.sdf
+.hg
 
 # /api/libsphinxclient/
 /api/libsphinxclient/*.ncb
@@ -46,3 +46,34 @@
 # /win/
 /win/*.user
 /win/*.filters
+
+# New from topgit patch
+syntax:glob
+*.pyc
+*.ncb
+*.suo
+*.user
+*.o
+*.swp
+.DS_Store
+*.a
+*.obj
+*.dist
+a.out*
+Makefile
+Makefile.in
+/configure
+aclocal.m4
+/src/indexer
+/src/indextool
+/src/search
+/src/searchd
+/src/tests
+/src/spelldump
+
+*.orig
+.deps/
+config/
+junk/
+bin/
+

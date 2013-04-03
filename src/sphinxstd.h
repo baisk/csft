@@ -177,7 +177,7 @@ typedef unsigned long long uint64_t;
 #define UINT64_FMT "%" PRIu64
 #define INT64_FMT "%" PRIi64
 
-#ifndef UINT64_MAX
+#ifndef UINT64_MAX //FIX Warning -CS
 #define UINT64_MAX U64C(0xffffffffffffffff)
 #endif
 
@@ -248,10 +248,10 @@ void			operator delete ( void * pPtr ) throw ();
 void			operator delete [] ( void * pPtr ) throw ();
 #else
 /// delete for my new
-void			operator delete ( void * pPtr );
+void			operator delete ( void * pPtr ) throw();
 
 /// delete for my new
-void			operator delete [] ( void * pPtr );
+void			operator delete [] ( void * pPtr ) throw();
 #endif
 #endif // SPH_DEBUG_LEAKS || SPH_ALLOCS_PROFILER
 

@@ -317,13 +317,13 @@ void * operator new [] ( size_t iSize, const char * sFile, int iLine )
 }
 
 
-void operator delete ( void * pPtr )
+void operator delete ( void * pPtr ) throw() 
 {
 	sphDebugDelete ( pPtr, false );
 }
 
 
-void operator delete [] ( void * pPtr )
+void operator delete [] ( void * pPtr ) throw()
 {
 	sphDebugDelete ( pPtr, true );
 }
