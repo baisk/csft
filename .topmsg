@@ -1,7 +1,7 @@
 From: baisk <buaagaowei@gmail.com>
-Subject: [PATCH] t/cs_fix
+Subject: [PATCH] t/cs_branding
 
 <patch description>
-fix some bug in sphinx
+coreseek branding
 
 Signed-off-by: baisk <buaagaowei@gmail.com>

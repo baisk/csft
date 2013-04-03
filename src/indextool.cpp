@@ -705,6 +705,7 @@ int main ( int argc, char ** argv )
 			"--dumphitlist <INDEX> --wordid <ID>\n"
 			"\t\t\tdump hits for a given keyword\n"
 			"--htmlstrip <INDEX>\tfilter stdin using index HTML stripper settings\n"
+                        "\t\t\tfor a given index (taken from csft.conf)\n"
 			"--optimize-rt-klists <INDEX>\n"
 			"\t\t\toptimize kill list memory use in RT index disk chunks;\n"
 			"\t\t\teither for a given index or --all\n"

@@ -191,6 +191,7 @@ inline 			DWORD *	STATIC2DOCINFO ( DWORD * pAttrs )			{ return STATIC2DOCINFO_T<
 inline const	DWORD *	STATIC2DOCINFO ( const DWORD * pAttrs )	{ return STATIC2DOCINFO_T<SphDocID_t>(pAttrs); }
 
 
+
 /////////////////////////////////////////////////////////////////////////////
 
 #include "sphinxversion.h"
@@ -207,6 +208,17 @@ inline const	DWORD *	STATIC2DOCINFO ( const DWORD * pAttrs )	{ return STATIC2DOC
 #define SPH_MAX_WORD_LEN		42		// so that any UTF-8 word fits 127 bytes
 #define SPH_MAX_FILENAME_LEN	512
 #define SPH_MAX_FIELDS			256
+
+
+#define CORESEEK_VERSION		"4.1b4 [ Sphinx " SPHINX_VERSION "]"
+#define CORESEEK_BANNER			"Coreseek Fulltext " CORESEEK_VERSION "\nCopyright (c) 2007-2010,\nBeijing Choice Software Technologies Inc (http://www.coreseek.com)\n\n "
+
+#define REBANDING 1
+
+#if REBANDING
+#undef SPHINX_BANNER
+#define SPHINX_BANNER	CORESEEK_BANNER
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 
