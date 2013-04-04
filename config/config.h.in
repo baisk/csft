@@ -262,6 +262,9 @@
 /* little-endian */
 #undef USE_LITTLE_ENDIAN
 
+/* Define to 1 if you want to compile with libmmseg support */
+#undef USE_MMSEG
+
 /* Define to 1 if you want to compile with MySQL support */
 #undef USE_MYSQL
 
