@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 #
 # $Id: test2.py 489 2006-11-22 22:00:40Z shodan $
 #
@@ -5,9 +6,11 @@
 from sphinxapi import *
 import sys
 
-docs = ['this is my test text to be highlighted','this is another test text to be highlighted']
-words = 'test text'
-index = 'test1'
+#docs = ['this is my test text to be highlighted','this is another test text to be highlighted']
+#words = 'test'
+docs = ['中国人辣辣辣中的中国']
+words= '中国'
+index = 'python'
 
 opts = {'before_match':'<b>', 'after_match':'</b>', 'chunk_separator':' ... ', 'limit':400, 'around':15}
 

@@ -1,7 +1,8 @@
 From: baisk <buaagaowei@gmail.com>
-Subject: [PATCH] t/cs_branding
+Subject: [PATCH] r/csft5
 
 <patch description>
-coreseek branding
+based on sphinx-2.1.1
+http://coreseek.com
 
 Signed-off-by: baisk <buaagaowei@gmail.com>

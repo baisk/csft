@@ -1,1 +1,3 @@
-t/cs_fix
+t/cs_branding
+t/cs_pysource
+t/cs_mmseg
