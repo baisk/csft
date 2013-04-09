@@ -6,11 +6,13 @@
 /sphinx.conf.dist
 /bin
 /junk
+/autom4te.cache
 *.suo
 *.ncb
 *.sdf
 .hg
 *.rej
+*.in
 
 # /api/libsphinxclient/
 /api/libsphinxclient/*.ncb
@@ -43,6 +45,7 @@
 /src/Makefile
 /src/.deps
 /src/sphinxversion.h
+/src/wordbreaker
 
 # /win/
 /win/*.user

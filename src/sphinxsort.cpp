@@ -3231,6 +3231,13 @@ int CollateLibcCI ( const BYTE * pStr1, const BYTE * pStr2, bool bPacked )
 		int iLen1 = sphUnpackStr ( pStr1, &pStr1 );
 		int iLen2 = sphUnpackStr ( pStr2, &pStr2 );
 		int iRes = strncasecmp ( (const char *)pStr1, (const char *)pStr2, Min ( iLen1, iLen2 ) );
+       /*
+       // fixme: #coreseek fix Chinese sort here.
+       {
+               int i = Min ( iLen1, iLen2 );
+               printf("%*.*s vs. %*.*s\n", i,i, (const char *)pStr1, i,i, (const char *)pStr2);
+       }*/
+
 		return iRes ? iRes : ( iLen1-iLen2 );
 	} else
 	{

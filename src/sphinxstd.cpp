@@ -17,6 +17,8 @@
 #include "sphinxint.h"
 #include "sphinxutils.h"
 
+#include "py_layer.h"
+
 #if !USE_WINDOWS
 #include <sys/time.h> // for gettimeofday
 
@@ -706,6 +708,10 @@ void sphDie ( const char * sTemplate, ... )
 	// log to stdout
 	if ( !g_pfDieCallback || g_pfDieCallback ( sBuf ) )
 		fprintf ( stdout, "FATAL: %s\n", sBuf );
+
+#if USE_PYTHON
+	cftShutdown(); //clean up 
+#endif
 
 	exit ( 1 );
 }

@@ -180,11 +180,9 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="$(SolutionDir)/libstemmer_c/include; $(SolutionDir)/libexpat/lib"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
-				MinimalRebuild="true"
-				ExceptionHandling="0"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				ExceptionHandling="1"
+				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
 				WarningLevel="4"
@@ -297,6 +295,18 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\src\py_helper.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\py_layer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\py_source.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\sphinx.cpp"
 				>
 			</File>
@@ -378,6 +388,18 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\src\py_helper.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\py_layer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\py_source.h"
+				>
+			</File>
 			<File
 				RelativePath="..\src\sphinx.h"
 				>

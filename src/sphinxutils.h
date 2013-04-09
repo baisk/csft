@@ -134,6 +134,116 @@ protected:
 
 /////////////////////////////////////////////////////////////////////////////
 
+template < typename T > struct CSphMTFHashEntry
+{
+	CSphString				m_sKey;
+	CSphMTFHashEntry<T> *	m_pNext;
+	int						m_iSlot;
+	T						m_tValue;
+};
+
+
+template < typename T, int SIZE, class HASHFUNC > class CSphMTFHash
+{
+public:
+	/// ctor
+	CSphMTFHash ()
+	{
+		m_pData = new CSphMTFHashEntry<T> * [ SIZE ];
+		for ( int i=0; i<SIZE; i++ )
+			m_pData[i] = NULL;
+	}
+
+	/// dtor
+	~CSphMTFHash ()
+	{
+		for ( int i=0; i<SIZE; i++ )
+		{
+			CSphMTFHashEntry<T> * pHead = m_pData[i];
+			while ( pHead )
+			{
+				CSphMTFHashEntry<T> * pNext = pHead->m_pNext;
+				SafeDelete ( pHead );
+				pHead = pNext;
+			}
+		}
+	}
+
+	/// add record to hash
+	/// OPTIMIZE: should pass T not by reference for simple types
+	T & Add ( const char * sKey, int iKeyLen, T & tValue )
+	{
+		DWORD uHash = HASHFUNC::Hash ( sKey ) % SIZE;
+
+		// find matching entry
+		CSphMTFHashEntry<T> * pEntry = m_pData [ uHash ];
+		CSphMTFHashEntry<T> * pPrev = NULL;
+		while ( pEntry && strcmp ( sKey, pEntry->m_sKey.cstr() ) )
+		{
+			pPrev = pEntry;
+			pEntry = pEntry->m_pNext;
+		}
+
+		if ( !pEntry )
+		{
+			// not found, add it, but don't MTF
+			pEntry = new CSphMTFHashEntry<T>;
+			if ( iKeyLen )
+				pEntry->m_sKey.SetBinary ( sKey, iKeyLen );
+			else
+				pEntry->m_sKey = sKey;
+			pEntry->m_pNext = NULL;
+			pEntry->m_iSlot = (int)uHash;
+			pEntry->m_tValue = tValue;
+			if ( !pPrev )
+				m_pData [ uHash ] = pEntry;
+			else
+				pPrev->m_pNext = pEntry;
+		} else
+		{
+			// MTF on access
+			if ( pPrev )
+			{
+				pPrev->m_pNext = pEntry->m_pNext;
+				pEntry->m_pNext = m_pData [ uHash ];
+				m_pData [ uHash ] = pEntry;
+			}
+		}
+
+		return pEntry->m_tValue;
+	}
+
+	/// find first non-empty entry
+	const CSphMTFHashEntry<T> * FindFirst ()
+	{
+		for ( int i=0; i<SIZE; i++ )
+			if ( m_pData[i] )
+				return m_pData[i];
+		return NULL;
+	}
+
+	/// find next non-empty entry
+	const CSphMTFHashEntry<T> * FindNext ( const CSphMTFHashEntry<T> * pEntry )
+	{
+		assert ( pEntry );
+		if ( pEntry->m_pNext )
+			return pEntry->m_pNext;
+
+		for ( int i=1+pEntry->m_iSlot; i<SIZE; i++ )
+			if ( m_pData[i] )
+				return m_pData[i];
+		return NULL;
+	}
+
+protected:
+	CSphMTFHashEntry<T> **	m_pData;
+};
+
+#define HASH_FOREACH(_it,_hash) \
+	for ( _it=_hash.FindFirst(); _it; _it=_hash.FindNext(_it) )
+
+/////////////////////////////////////////////////////////////////////////////
+
 enum
 {
 	TOKENIZER_SBCS		= 1,
