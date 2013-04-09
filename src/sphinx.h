@@ -28,6 +28,7 @@
 	#define	USE_LIBSTEMMER	0	/// whether to compile libstemmber support
 	#define	USE_RE2			0	/// whether to compile RE2 support
 	#define USE_WINDOWS		1	/// whether to compile for Windows
+	#define USE_MMSEG		1   /// enable mmseg
 	#define USE_SYSLOG		0	/// whether to use syslog for logging
 
 	#define UNALIGNED_RAM_ACCESS	1
@@ -483,6 +484,10 @@ struct CSphTokenizerSettings
 	CSphString			m_sBlendChars;
 	CSphString			m_sBlendMode;
 
+	//mmseg
+	int					m_iDebug; //coreseek: used to mark is debug output tokens
+	CSphString			m_sDictPath; //coreseek: where to find segmentor's dict.
+
 						CSphTokenizerSettings ();
 };
 
@@ -570,6 +575,9 @@ public:
 
 	/// get synonym file info
 	virtual const CSphSavedFile &	GetSynFileInfo () const { return m_tSynFileInfo; }
+	
+	/// mark as debug tokenizer's output --coreseek -mmseg
+	virtual int					DumpToken () { return m_tSettings.m_iDebug; }
 
 public:
 	/// pass next buffer
@@ -637,7 +645,9 @@ public:
 
 	/// set new buffer ptr (must be within current bounds)
 	virtual void					SetBufferPtr ( const char * sNewPtr ) = 0;
-
+       
+        ///mmseg
+        virtual const BYTE*                             GetThesaurus(BYTE * , int  ) { return NULL; }
 	/// get settings hash
 	virtual uint64_t				GetSettingsFNV () const { return m_tLC.GetFNV(); }
 
@@ -655,6 +665,7 @@ protected:
 
 	CSphLowercaser					m_tLC;						///< my lowercaser
 	int								m_iLastTokenLen;			///< last token length, in codepoints
+	int								m_iLastTokenBufferLen;		///< the buffer length -- coreseek;	use in mmseg patch.
 	bool							m_bTokenBoundary;			///< last token boundary flag (true after boundary codepoint followed by separator)
 	bool							m_bBoundary;				///< boundary flag (true immediately after boundary codepoint)
 	int								m_iBoundaryOffset;			///< boundary character offset (in bytes)
@@ -1552,6 +1563,7 @@ struct CSphSourceSettings
 	int		m_iOvershortStep;	///< position step on overshort token (default is 1)
 	int		m_iStopwordStep;	///< position step on stopword token (default is 1)
 	bool	m_bIndexSP;			///< whether to index sentence and paragraph delimiters
+        int             m_bDebugDump;           ///< mmseg charset debug output feature
 	bool	m_bIndexFieldLens;	///< whether to index field lengths
 
 	CSphVector<CSphString>	m_dPrefixFields;	///< list of prefix fields

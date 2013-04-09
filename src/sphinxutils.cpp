@@ -356,6 +356,8 @@ static KeyDesc_t g_dKeysIndex[] =
 	{ "min_word_len",			0, NULL },
 	{ "charset_type",			0, NULL },
 	{ "charset_table",			0, NULL },
+	{ "charset_dictpath",		0, NULL }, //coreseek: mmseg's dictionary path
+	{ "charset_debug",			0, NULL }, //coreseek: debug output tokens
 	{ "ignore_chars",			0, NULL },
 	{ "min_prefix_len",			0, NULL },
 	{ "min_infix_len",			0, NULL },
@@ -1055,6 +1057,11 @@ bool CSphConfigParser::Parse ( const char * sFileName, const char * pBuffer )
 
 bool sphConfTokenizer ( const CSphConfigSection & hIndex, CSphTokenizerSettings & tSettings, CSphString & sError )
 {
+	// charset_type
+	CSphScopedPtr<ISphTokenizer> pTokenizer ( NULL );
+	
+	if(hIndex("charset_debug"))
+		tSettings.m_iDebug = hIndex["charset_debug"].intval();
 	tSettings.m_iNgramLen = Max ( hIndex.GetInt ( "ngram_len" ), 0 );
 
 	if ( !hIndex("charset_type") || hIndex["charset_type"]=="sbcs" )
@@ -1072,7 +1079,20 @@ bool sphConfTokenizer ( const CSphConfigSection & hIndex, CSphTokenizerSettings 
 				sphWarning ( "ngram_chars specified, but ngram_len=0; IGNORED" );
 		}
 
-	} else
+	}
+	#if USE_MMSEG  || USE_CRFSEG
+	//XXX:fixme : sphinx changes tokenizer create process
+	else if (hIndex("charset_dictpath") && hIndex["charset_type"]=="zh_cn.utf-8" )
+	{
+		tSettings.m_sDictPath = hIndex["charset_dictpath"];
+		tSettings.m_iType = TOKENIZER_ZHCN_UTF8;
+	} 
+	else if(hIndex["charset_type"]=="space.utf-8" )
+	{
+		tSettings.m_iType = TOKENIZER_SPACE;
+	}
+	#endif
+	else
 	{
 		sError.SetSprintf ( "unknown charset type '%s'", hIndex["charset_type"].cstr() );
 		return false;
@@ -1208,6 +1228,7 @@ bool sphConfIndex ( const CSphConfigSection & hIndex, CSphIndexSettings & tSetti
 	tSettings.m_bIndexExactWords = hIndex.GetInt ( "index_exact_words" )!=0;
 	tSettings.m_iOvershortStep = Min ( Max ( hIndex.GetInt ( "overshort_step", 1 ), 0 ), 1 );
 	tSettings.m_iStopwordStep = Min ( Max ( hIndex.GetInt ( "stopword_step", 1 ), 0 ), 1 );
+        tSettings.m_bDebugDump = hIndex.GetInt ( "charset_debug" )!=0;
 	tSettings.m_iEmbeddedLimit = hIndex.GetSize ( "embedded_limit", 16384 );
 	tSettings.m_bIndexFieldLens = hIndex.GetInt ( "index_field_lengths" )!=0;
 
