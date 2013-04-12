@@ -11,8 +11,14 @@
 *.ncb
 *.sdf
 .hg
+*.orig
 *.rej
 *.in
+*.m4
+*.pyc
+autom4te.cache/
+*.in
+*~
 
 # /api/libsphinxclient/
 /api/libsphinxclient/*.ncb
